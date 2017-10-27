@@ -1,0 +1,9 @@
+---
+# Arch-specific task file for Ruby
+
+- include_vars: arch.yml
+
+- name: Install Ruby
+  pacman:
+    name: "ruby-{{ ruby_version }}"
+    state: present

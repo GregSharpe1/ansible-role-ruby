@@ -1,0 +1,28 @@
+---
+# Debian-specific task file for Ruby
+
+- include_vars: debian.yml
+
+- name: Install the Debian Ruby dependencies
+  apt:
+    name: "{{ item }}"
+    state: present
+  with_items:
+   - "{{ ruby_dependencies }}"
+
+- name: Import the RVM apt key
+  apt_key:
+    keyserver: "hkp://keys.gnupg.net"
+    id: "409B6B1796C275462A1703113804BB82D39DC0E3"
+
+- name: Install RVM
+  command: "curl -L get.rvm.io | bash -s stable"
+
+- name: Sourcing the RVM source file
+  command: "source /home/{{ ansible_user }}/.rvm/scripts/rvm"
+
+- name: Reload the RVM
+  command: "rvm reload"
+
+- name: Install Ruby using RVM
+  command: "rvm install {{ ruby_version }}"

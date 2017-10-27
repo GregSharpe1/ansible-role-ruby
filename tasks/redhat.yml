@@ -1,0 +1,28 @@
+---
+# Redhat-specific task file for Ruby
+
+- include_vars: redhat.yml
+
+- name: Install Ruby dependencies
+  yum:
+    name: "{{ item }}"
+    state: present
+  with_items:
+    - "{{ ruby_dependencies }}"
+
+- name: Import the RVM rpm key
+  rpm_key:
+    state: present
+    key: "https://rvm.io/mpapis.asc"
+
+- name: Install RVM
+  command: "curl -L get.rvm.io | bash -s stable"
+
+- name: Sourcing the RVM source file
+  command: "source /home/{{ ansible_user }}/.rvm/scripts/rvm"
+
+- name: Reload the RVM
+  command: "rvm reload"
+
+- name: Install Ruby using RVM
+  command: "rvm install {{ ruby_version }}"
